@@ -1,8 +1,15 @@
-import React from 'react'
+import React, { FormEvent, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 const LoginPage = () => {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+
   const navigate = useNavigate()
+
+  const handleLogin = (e: FormEvent) => {
+    e.preventDefault()
+  }
 
   return (
     <div className='container mx-auto flex grow'>
@@ -13,13 +20,15 @@ const LoginPage = () => {
         />
       </div>
       <div className='flex h-full w-3/5 justify-center'>
-        <form className='flex w-1/2 flex-col justify-center gap-3'>
+        <form className='flex w-1/2 flex-col justify-center gap-3' onSubmit={handleLogin}>
           <div className='grid gap-1'>
             <div>Email address</div>
             <input
               type='email'
               placeholder='請輸入帳號'
               className='w-full rounded-md border border-gray-400 p-2 focus:outline-none'
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
             <p className='text-xs text-gray-500'>
               {/* eslint-disable-next-line quotes */}
@@ -32,6 +41,8 @@ const LoginPage = () => {
               type='password'
               placeholder='請輸入密碼'
               className='w-full rounded-md border border-gray-400 p-2 focus:outline-none'
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
           </div>
           <button className='w-fit rounded-md bg-blue-500 py-2 px-4 text-white focus:outline-none'>
