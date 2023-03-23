@@ -7,24 +7,20 @@ import HomePage from './containers/HomePage'
 import LoginPage from './containers/LoginPage'
 import SignupPage from './containers/SignupPage'
 import ChatPage from './containers/ChatPage'
-import { useAuth } from './contexts/Auth.context'
+import AuthLayout from './containers/Route/AuthLayout'
 
 function App() {
-  const { user } = useAuth()
-
   return (
     <>
       <div className='flex h-screen flex-col'>
         <Navigation />
         <Routes>
           <Route path='/' element={<HomePage />} />
-          {!user && (
-            <>
-              <Route path='/login' element={<LoginPage />} />
-              <Route path='/signup' element={<SignupPage />} />
-            </>
-          )}
-          {user && <Route path='/chat' element={<ChatPage />} />}
+          <Route path='/login' element={<LoginPage />} />
+          <Route path='/signup' element={<SignupPage />} />
+          <Route element={<AuthLayout />}>
+            <Route path='/chat' element={<ChatPage />} />
+          </Route>
         </Routes>
       </div>
     </>

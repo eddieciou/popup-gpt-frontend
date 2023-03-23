@@ -2,6 +2,7 @@ import React, { createContext, useContext, useMemo } from 'react'
 import { TUser } from '../types/commons.type'
 import { useLocalStorage } from 'usehooks-ts'
 import { fetchAPI } from '../services/appApi.service'
+import { useNavigate } from 'react-router-dom'
 
 type TAuthContext = {
   user: TUser | null
@@ -20,6 +21,8 @@ const AuthContext = createContext<TAuthContext>({
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useLocalStorage<TUser | null>('user', null)
 
+  const navigate = useNavigate()
+
   const login = (email: string, password: string) => {
     const body = {
       email,
@@ -27,6 +30,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
     return fetchAPI('/users/login', 'POST', body).then((result: TUser) => {
       setUser(result)
+      navigate('/chat', { replace: true })
     })
   }
 
@@ -36,7 +40,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setUser,
       login,
     }),
-    [],
+    [user],
   )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
