@@ -1,14 +1,19 @@
 import React, { FormEvent, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../contexts/Auth.context'
 
 const LoginPage = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
+  const { login } = useAuth()
   const navigate = useNavigate()
 
   const handleLogin = (e: FormEvent) => {
     e.preventDefault()
+    login(email, password).catch((error) => {
+      console.log(error)
+    })
   }
 
   return (
@@ -29,6 +34,7 @@ const LoginPage = () => {
               className='w-full rounded-md border border-gray-400 p-2 focus:outline-none'
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              required
             />
             <p className='text-xs text-gray-500'>
               {/* eslint-disable-next-line quotes */}
@@ -43,9 +49,13 @@ const LoginPage = () => {
               className='w-full rounded-md border border-gray-400 p-2 focus:outline-none'
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              required
             />
           </div>
-          <button className='w-fit rounded-md bg-blue-500 py-2 px-4 text-white focus:outline-none'>
+          <button
+            type='submit'
+            className='w-fit rounded-md bg-blue-500 py-2 px-4 text-white hover:bg-blue-400 focus:outline-none'
+          >
             Login
           </button>
           <div className='flex w-full justify-center gap-1'>

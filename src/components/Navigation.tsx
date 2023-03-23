@@ -3,8 +3,11 @@ import DropDownNavigation from './DropDownNavigation'
 import { useNavigate } from 'react-router-dom'
 
 import logo from '../assets/logo.png'
+import { useAuth } from '../contexts/Auth.context'
 
 const Navigation = () => {
+  const { user } = useAuth()
+
   const navigate = useNavigate()
 
   return (
@@ -14,10 +17,12 @@ const Navigation = () => {
           <img src={logo} className='h-14 w-14' />
         </button>
         <div className='flex gap-4'>
-          <button className='focus:outline-none' onClick={() => navigate('/login')}>
-            Login
-          </button>
-          <DropDownNavigation title='Jane Doe' />
+          {!user && (
+            <button className='focus:outline-none' onClick={() => navigate('/login')}>
+              Login
+            </button>
+          )}
+          <DropDownNavigation title={user?.name || ''} />
           <button className='focus:outline-none' onClick={() => navigate('/chat')}>
             Chat
           </button>
