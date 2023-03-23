@@ -3,6 +3,9 @@ import { useNavigate } from 'react-router-dom'
 import { AiFillPlusCircle } from 'react-icons/ai'
 
 import botImg from '../assets/bot.jpeg'
+import { signup } from '../services/appApi.service'
+import { Simulate } from 'react-dom/test-utils'
+import error = Simulate.error
 
 const SignupPage = () => {
   const [email, setEmail] = useState('')
@@ -49,7 +52,19 @@ const SignupPage = () => {
     e.preventDefault()
     if (!image) return alert('Please upload your profile picture')
     const url = await uploadImage()
-    console.log(url)
+    const body = {
+      name,
+      email,
+      password,
+      picture: url,
+    }
+    signup(body)
+      .then((result) => {
+        console.log(result)
+      })
+      .catch((error) => {
+        console.log(error)
+      })
   }
 
   return (
