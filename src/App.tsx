@@ -8,6 +8,7 @@ import LoginPage from './containers/LoginPage'
 import SignupPage from './containers/SignupPage'
 import ChatPage from './containers/ChatPage'
 import AuthLayout from './containers/Route/AuthLayout'
+import { MessageProvider } from './contexts/Message.context'
 
 function App() {
   return (

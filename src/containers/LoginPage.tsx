@@ -61,7 +61,11 @@ const LoginPage = () => {
           <div className='flex w-full justify-center gap-1'>
             {/* eslint-disable-next-line quotes */}
             Don{"'"}t have an account?
-            <button onClick={() => navigate('/signup')} className='text-blue-600 underline'>
+            <button
+              type='button'
+              onClick={() => navigate('/signup')}
+              className='text-blue-600 underline'
+            >
               Signup
             </button>
           </div>

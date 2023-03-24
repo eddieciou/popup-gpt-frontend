@@ -6,6 +6,7 @@ import botImg from '../assets/bot.jpeg'
 import { signup } from '../services/appApi.service'
 import { Simulate } from 'react-dom/test-utils'
 import error = Simulate.error
+import { useAuth } from '../contexts/Auth.context'
 
 const SignupPage = () => {
   const [email, setEmail] = useState('')
@@ -15,6 +16,7 @@ const SignupPage = () => {
   const [image, setImage] = useState<Blob | string>('')
   const [imagePreview, setImagePreview] = useState<string>('')
 
+  const { setUser } = useAuth()
   const navigate = useNavigate()
 
   const validateImage = (e: ChangeEvent<HTMLInputElement>) => {
@@ -60,7 +62,8 @@ const SignupPage = () => {
     }
     signup(body)
       .then((result) => {
-        console.log(result)
+        setUser(result)
+        navigate('/chat', { replace: true })
       })
       .catch((error) => {
         console.log(error)
@@ -136,13 +139,20 @@ const SignupPage = () => {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
-            <button className='w-fit rounded-md bg-blue-500 py-2 px-4 text-white focus:outline-none'>
+            <button
+              type='submit'
+              className='w-fit rounded-md bg-blue-500 py-2 px-4 text-white focus:outline-none'
+            >
               {uploadingImage ? 'Signing you up...' : 'Signup'}
             </button>
             <div className='flex w-full justify-center gap-1'>
               {/* eslint-disable-next-line quotes */}
               Already have an account ?
-              <button onClick={() => navigate('/login')} className='text-blue-600 underline'>
+              <button
+                type='button'
+                onClick={() => navigate('/login')}
+                className='text-blue-600 underline'
+              >
                 Login
               </button>
             </div>

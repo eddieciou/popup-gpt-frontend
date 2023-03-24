@@ -21,6 +21,12 @@ const DropDownNavigation = ({ title }: IDropDownNavigationProps) => {
       onClick={() => setDropDown(!dropDown)}
       disabled={!user}
     >
+      {user && (
+        <img
+          src={user?.picture}
+          className='mr-2 h-10 w-10 rounded-full border border-gray-500 object-cover'
+        />
+      )}
       <p>{title}</p>
       {user && <span className=''>{dropDown ? <AiFillCaretUp /> : <AiFillCaretDown />}</span>}
       <div

@@ -1,4 +1,4 @@
-const API_SERVER = 'http://192.168.0.101:5001'
+const API_SERVER = 'http://192.168.0.102:5001'
 
 export const handleResponse = (response: Response) =>
   response.text().then((text: string) => {
@@ -25,3 +25,5 @@ export const fetchAPI = (path: string, method: string, body = {}) => {
 
 export const signup = (body: { name: string; email: string; password: string; picture: string }) =>
   fetchAPI('/users', 'POST', body)
+
+export const getRooms = () => fetchAPI('/rooms', 'GET')

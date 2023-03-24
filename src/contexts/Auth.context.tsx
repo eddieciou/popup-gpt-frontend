@@ -12,9 +12,7 @@ type TAuthContext = {
 
 const AuthContext = createContext<TAuthContext>({
   user: null,
-  setUser: () => {
-    // do nothing
-  },
+  setUser: () => null,
   login: () => Promise.reject(),
 })
 
@@ -30,6 +28,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
     return fetchAPI('/users/login', 'POST', body).then((result: TUser) => {
       setUser(result)
+      // socket work
       navigate('/chat', { replace: true })
     })
   }
