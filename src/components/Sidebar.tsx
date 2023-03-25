@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useMessage } from '../contexts/Message.context'
-import { TNewMessage, TUser } from '../types/commons.type'
+import { TUser } from '../types/commons.type'
 import { getRooms } from '../services/appApi.service'
 import { useAuth } from '../contexts/Auth.context'
 
@@ -19,12 +19,13 @@ const Sidebar = () => {
     setNewMessages,
   } = useMessage()
 
-  const { user } = useAuth()
+  const { user, setUser } = useAuth()
 
   useEffect(() => {
     getRooms().then((result: Array<string>) => {
       setRooms(result)
       setCurrentRoom(result[0])
+      setNewMessages({ ...newMessages, [result[0]]: 0 })
       socket?.emit('join-room', result[0])
     })
     socket?.emit('new-user')
@@ -41,6 +42,9 @@ const Sidebar = () => {
     if (isPublic) {
       setPrivateMemberMessage(null)
     }
+    if (user) {
+      setUser({ ...user, newMessages: { ...newMessages, [room]: 0 } })
+    }
     setNewMessages({ ...newMessages, [room]: 0 })
   }
 
@@ -48,6 +52,12 @@ const Sidebar = () => {
     socket?.on('notifications', (room: string) => {
       if (currentRoom !== room) {
         setNewMessages({ ...newMessages, [room]: newMessages[room] ? newMessages[room] + 1 : 1 })
+        if (user) {
+          setUser({
+            ...user,
+            newMessages: { ...newMessages, [room]: newMessages[room] ? newMessages[room] + 1 : 1 },
+          })
+        }
       }
     })
     return () => {

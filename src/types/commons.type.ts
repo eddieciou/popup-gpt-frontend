@@ -3,7 +3,7 @@ export type TUser = {
   name: string
   email: string
   picture: string
-  newMessage: object
+  newMessages: TNewMessages
   status: string
 }
 
@@ -21,6 +21,6 @@ export type TMessages = {
   messagesByDate: Array<TMessageByDay>
 }
 
-export type TNewMessage = {
+export type TNewMessages = {
   [room: string]: number
 }

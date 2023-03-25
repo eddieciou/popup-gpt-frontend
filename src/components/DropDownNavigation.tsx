@@ -39,7 +39,7 @@ const DropDownNavigation = ({ title }: IDropDownNavigationProps) => {
           <div
             className='flex items-center justify-center gap-2 p-2 font-bold text-red-600 hover:text-red-700'
             onClick={() => {
-              logout(user._id).then(() => {
+              logout(user._id, user.newMessages).then(() => {
                 setUser(null)
                 navigate('/', { replace: true })
               })

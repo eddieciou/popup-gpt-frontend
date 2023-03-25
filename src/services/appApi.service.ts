@@ -1,3 +1,5 @@
+import { TNewMessages } from '../types/commons.type'
+
 const API_SERVER = 'http://192.168.0.102:5001'
 
 export const handleResponse = (response: Response) =>
@@ -28,6 +30,6 @@ export const signup = (body: { name: string; email: string; password: string; pi
 
 export const getRooms = () => fetchAPI('/rooms', 'GET')
 
-export const logout = (userId: string) => {
-  return fetchAPI('/logout', 'POST', { _id: userId })
+export const logout = (userId: string, newMessages: TNewMessages) => {
+  return fetchAPI('/logout', 'POST', { _id: userId, newMessages })
 }

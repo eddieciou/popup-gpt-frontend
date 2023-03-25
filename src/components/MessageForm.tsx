@@ -1,4 +1,4 @@
-import React, { FormEvent, useEffect, useState } from 'react'
+import React, { createRef, FormEvent, useEffect, useState } from 'react'
 import { BsFillSendFill } from 'react-icons/bs'
 import { useMessage } from '../contexts/Message.context'
 import { useAuth } from '../contexts/Auth.context'
@@ -8,6 +8,7 @@ const MessageForm = () => {
 
   const { user } = useAuth()
   const { socket, currentRoom, messages, setMessages } = useMessage()
+  const messageEndRef = createRef<HTMLDivElement>()
 
   const getFormattedDate = () => {
     const date = new Date()
@@ -32,6 +33,14 @@ const MessageForm = () => {
     socket?.emit('message-room', currentRoom, message, user, time, todayDate)
     setMessage('')
   }
+
+  const scrollToBottom = () => {
+    messageEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }
+
+  useEffect(() => {
+    scrollToBottom()
+  }, [messages])
 
   useEffect(() => {
     socket?.on('room-messages', (roomMessages) => {
@@ -70,6 +79,7 @@ const MessageForm = () => {
                   </div>
                 </div>
               ))}
+              <div ref={messageEndRef} />
             </div>
           </div>
         ))}

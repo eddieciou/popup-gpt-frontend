@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useMemo, useState } from 'react'
 import { io, Socket } from 'socket.io-client'
-import { TMessages, TNewMessage, TUser } from '../types/commons.type'
+import { TMessages, TNewMessages, TUser } from '../types/commons.type'
+import { useAuth } from './Auth.context'
 
 const SOCKET_URL = 'http://192.168.0.102:5001'
 
@@ -15,8 +16,8 @@ type TMessageContext = {
   setMessages: (messages: Array<TMessages> | []) => void
   privateMemberMessage: TUser | null
   setPrivateMemberMessage: (privateMemberMessage: TUser | null) => void
-  newMessages: TNewMessage
-  setNewMessages: (newMessages: TNewMessage) => void
+  newMessages: TNewMessages
+  setNewMessages: (newMessages: TNewMessages) => void
   socket: Socket | null
 }
 
@@ -37,12 +38,14 @@ const MessageContext = createContext<TMessageContext>({
 })
 
 export const MessageProvider = ({ children }: { children: React.ReactNode }) => {
+  const { user } = useAuth()
+
   const [rooms, setRooms] = useState<Array<string> | []>([])
   const [currentRoom, setCurrentRoom] = useState('')
   const [members, setMembers] = useState<Array<TUser> | []>([])
   const [messages, setMessages] = useState<Array<TMessages> | []>([])
   const [privateMemberMessage, setPrivateMemberMessage] = useState<TUser | null>(null)
-  const [newMessages, setNewMessages] = useState<TNewMessage>({})
+  const [newMessages, setNewMessages] = useState<TNewMessages>(user?.newMessages || {})
 
   const socket = io(SOCKET_URL)
 
