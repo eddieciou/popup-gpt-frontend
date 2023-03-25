@@ -3,6 +3,7 @@ import { AiFillCaretDown, AiFillCaretUp } from 'react-icons/ai'
 import { RiLogoutBoxFill } from 'react-icons/ri'
 import { useAuth } from '../contexts/Auth.context'
 import { useNavigate } from 'react-router-dom'
+import { logout } from '../services/appApi.service'
 
 interface IDropDownNavigationProps {
   title: string
@@ -38,8 +39,10 @@ const DropDownNavigation = ({ title }: IDropDownNavigationProps) => {
           <div
             className='flex items-center justify-center gap-2 p-2 font-bold text-red-600 hover:text-red-700'
             onClick={() => {
-              setUser(null)
-              navigate('/', { replace: true })
+              logout(user._id).then(() => {
+                setUser(null)
+                navigate('/', { replace: true })
+              })
             }}
           >
             <RiLogoutBoxFill size='20' />

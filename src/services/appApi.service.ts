@@ -27,3 +27,7 @@ export const signup = (body: { name: string; email: string; password: string; pi
   fetchAPI('/users', 'POST', body)
 
 export const getRooms = () => fetchAPI('/rooms', 'GET')
+
+export const logout = (userId: string) => {
+  return fetchAPI('/logout', 'POST', { _id: userId })
+}

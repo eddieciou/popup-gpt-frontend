@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useMemo, useState } from 'react'
 import { io, Socket } from 'socket.io-client'
-import { TUser } from '../types/commons.type'
+import { TMessages, TNewMessage, TUser } from '../types/commons.type'
 
 const SOCKET_URL = 'http://192.168.0.102:5001'
 
@@ -11,12 +11,12 @@ type TMessageContext = {
   setCurrentRoom: (currentRoom: string) => void
   members: Array<TUser> | []
   setMembers: (members: Array<TUser> | []) => void
-  messages: Array<object> | []
-  setMessages: (messages: Array<object> | []) => void
-  privateMemberMessage: object
-  setPrivateMemberMessage: (privateMemberMessage: object) => void
-  newMessages: object
-  setNewMessages: (newMessages: object) => void
+  messages: Array<TMessages> | []
+  setMessages: (messages: Array<TMessages> | []) => void
+  privateMemberMessage: TUser | null
+  setPrivateMemberMessage: (privateMemberMessage: TUser | null) => void
+  newMessages: TNewMessage
+  setNewMessages: (newMessages: TNewMessage) => void
   socket: Socket | null
 }
 
@@ -29,7 +29,7 @@ const MessageContext = createContext<TMessageContext>({
   setMembers: () => null,
   messages: [],
   setMessages: () => null,
-  privateMemberMessage: {},
+  privateMemberMessage: null,
   setPrivateMemberMessage: () => null,
   newMessages: {},
   setNewMessages: () => null,
@@ -40,9 +40,9 @@ export const MessageProvider = ({ children }: { children: React.ReactNode }) => 
   const [rooms, setRooms] = useState<Array<string> | []>([])
   const [currentRoom, setCurrentRoom] = useState('')
   const [members, setMembers] = useState<Array<TUser> | []>([])
-  const [messages, setMessages] = useState<Array<object> | []>([])
-  const [privateMemberMessage, setPrivateMemberMessage] = useState<object>({})
-  const [newMessages, setNewMessages] = useState<object>({})
+  const [messages, setMessages] = useState<Array<TMessages> | []>([])
+  const [privateMemberMessage, setPrivateMemberMessage] = useState<TUser | null>(null)
+  const [newMessages, setNewMessages] = useState<TNewMessage>({})
 
   const socket = io(SOCKET_URL)
 

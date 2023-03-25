@@ -1,4 +1,4 @@
-import React, { FormEvent, useState } from 'react'
+import React, { FormEvent, useEffect, useState } from 'react'
 import { BsFillSendFill } from 'react-icons/bs'
 import { useMessage } from '../contexts/Message.context'
 import { useAuth } from '../contexts/Auth.context'
@@ -33,14 +33,47 @@ const MessageForm = () => {
     setMessage('')
   }
 
-  socket?.off('room-messages').on('room-messages', (roomMessages) => {
-    console.log(roomMessages)
-    setMessages(roomMessages)
-  })
+  useEffect(() => {
+    socket?.on('room-messages', (roomMessages) => {
+      setMessages(roomMessages)
+    })
+    socket?.emit('join-room', currentRoom)
+
+    return () => {
+      socket?.off('room-messages')
+    }
+  }, [currentRoom])
 
   return (
     <div className='flex h-full flex-col justify-center gap-6'>
-      <div className='h-[80vh] border border-gray-300'></div>
+      <div className='scrollbar-hide h-[80vh] overflow-y-scroll border border-gray-300'>
+        {messages.map(({ _id: date, messagesByDate }) => (
+          <div key={date}>
+            <p className='text-center text-gray-500'>{date}</p>
+            <div className='flex flex-col gap-2 px-5 pb-4'>
+              {messagesByDate.map(({ content, time, _id, from: sender }) => (
+                <div
+                  key={_id}
+                  className={`flex ${sender._id === user?._id ? 'justify-end' : 'justify-start'}`}
+                >
+                  <div
+                    className={`
+                      flex min-w-[20vh] max-w-md flex-col gap-2 rounded-md p-3
+                      ${sender._id === user?._id ? 'bg-blue-600 text-white' : 'bg-gray-300'}`}
+                  >
+                    <div className='flex items-center gap-2 font-bold'>
+                      <img src={sender.picture} className='h-10 w-10 rounded-full object-cover' />
+                      <p>{sender._id === user?._id ? '自己' : sender.name}</p>
+                    </div>
+                    <div>{content}</div>
+                    <div className='text-xs'>{time}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
       <form className='flex gap-4' onSubmit={handleSubmit}>
         <input
           type='text'
