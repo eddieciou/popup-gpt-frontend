@@ -73,6 +73,8 @@ const Sidebar = () => {
     joinRoom(roomId, false)
   }
 
+  const cleanMembers = members.filter((member) => member._id !== user?._id)
+
   return (
     <div className='h-full'>
       <h2 className='py-3 text-3xl font-bold'>Available rooms</h2>
@@ -82,7 +84,9 @@ const Sidebar = () => {
             key={index}
             className={`flex cursor-pointer items-center justify-between border border-gray-300 p-3
             ${room !== currentRoom && 'hover:bg-gray-100'}
+            ${index === 0 && 'rounded-t-md'}
             ${rooms.length - 1 !== index && 'border-b-0'}
+            ${rooms.length - 1 === index && 'rounded-b-md'}
             ${room === currentRoom && 'bg-blue-600 text-white'}`}
             onClick={() => {
               joinRoom(room)
@@ -99,13 +103,15 @@ const Sidebar = () => {
       </div>
       <h2 className='py-3 text-3xl font-bold'>Members</h2>
       <div className='scrollbar-hide h-[47vh] overflow-y-scroll rounded-md'>
-        {members.map((member) => (
+        {cleanMembers.map((member, index) => (
           <div
             key={member._id}
-            className={`flex cursor-pointer items-center justify-between border border-gray-300 p-3
-            ${member._id === user?._id && 'hidden'}
+            className={`flex cursor-pointer items-center justify-between  border border-gray-300 p-3
             ${privateMemberMessage?._id === member._id && 'bg-blue-600 text-white'}
             ${privateMemberMessage?._id !== member._id && 'hover:bg-gray-100'}
+            ${index === 0 && 'rounded-t-md'}
+            ${cleanMembers.length - 1 !== index && 'border-b-0'}
+            ${cleanMembers.length - 1 === index && 'rounded-b-md'}
             `}
             onClick={() => handlePrivateMemberMessage(member)}
           >
