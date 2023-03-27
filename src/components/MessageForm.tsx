@@ -55,7 +55,7 @@ const MessageForm = () => {
 
   return (
     <div className='flex h-full flex-col justify-center gap-6'>
-      <div className='scrollbar-hide h-[80vh] overflow-y-scroll border border-gray-300'>
+      <div className='h-[80vh] overflow-y-scroll border border-gray-300 scrollbar-thin scrollbar-track-blue-100 scrollbar-thumb-blue-700'>
         {messages.map(({ _id: date, messagesByDate }) => (
           <div key={date}>
             <p className='text-center text-gray-500'>{date}</p>
@@ -94,7 +94,7 @@ const MessageForm = () => {
         />
         <button
           type='submit'
-          className='flex h-full w-1/12 items-center justify-center rounded-md bg-orange-500 hover:bg-orange-400 focus:outline-none'
+          className='flex h-full w-1/12 items-center justify-center rounded-md bg-orange-500 focus:outline-none hover:bg-orange-400'
         >
           <BsFillSendFill className='text-white' size='25' />
         </button>
